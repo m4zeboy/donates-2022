@@ -27,6 +27,7 @@ import {
 
 import { NewDonateModal } from './NewDonateModal'
 import { DonatesContext } from './context/donates'
+import toast, { Toaster } from 'react-hot-toast'
 
 function App() {
   const newDonateModal = useDisclosure()
@@ -61,6 +62,7 @@ function App() {
         </header>
         <main>
           <Box id="actions">
+            <Toaster/>
             <Button onClick={newDonateModal.onOpen} colorScheme="blue">
               + Nova Doação
             </Button>
@@ -69,7 +71,10 @@ function App() {
               variant="outline"
               color="blue"
               ml="10px"
-              onClick={() => copyTextToClipboard(JSON.stringify(donates))}
+              onClick={() => {
+                copyTextToClipboard(JSON.stringify(donates));
+                toast("Copiado!");
+              }}
             >
               Copiar
             </Button>
@@ -165,6 +170,7 @@ function App() {
               <Button colorScheme="blue" width="100%" onClick={() => {
                 setDonates(donates.filter((donate, index) => index !== donateIndexSelected))
                 deleteDonateModal.onClose();
+                toast.success("Doação Excluida")
               }}>Excluir</Button>
             </Box>
           </ModalContent>

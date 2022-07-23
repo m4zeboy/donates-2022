@@ -1,5 +1,6 @@
 import { Button, FormControl, FormLabel, Input, Modal, ModalContent, ModalHeader, ModalOverlay, Select, Textarea } from "@chakra-ui/react"
 import { useContext, useEffect, useState } from "react"
+import toast from "react-hot-toast"
 import { DonatesContext } from "./context/donates"
 
 export function NewDonateModal({isOpen, onClose}) {
@@ -44,6 +45,8 @@ export function NewDonateModal({isOpen, onClose}) {
     setDate('')
 
     onClose()
+    toast.success("Doação Salva")
+
   }
 
   return (
