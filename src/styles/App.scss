@@ -1,0 +1,19 @@
+
+#App {
+  font-family: 'Inter', sans-serif;
+  header {
+    background-color: rgb(54, 167, 54);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: #FFF;
+  }
+  main {
+    max-width: 900px;
+    margin: 40px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}
