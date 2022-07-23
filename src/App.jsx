@@ -1,107 +1,122 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { CopyIcon, DeleteIcon } from '@chakra-ui/icons'
 import './styles/App.scss'
 import logo from './assets/logo.png'
 import {
   Button,
-  FormControl,
-  FormLabel,
   Heading,
-  Input,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
-  Select,
   Table,
   TableCaption,
   TableContainer,
   Tbody,
   Td,
-  Textarea,
   Text,
   Th,
   Thead,
   Tr,
   useDisclosure,
   Box,
+  Stat,
+  StatLabel,
+  StatNumber,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  Modal,
 } from '@chakra-ui/react'
 
+import { NewDonateModal } from './NewDonateModal'
+import { DonatesContext } from './context/donates'
+
 function App() {
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const [responsibles, setResponsibles] = useState([
-    'Sandra',
-    'Luciana Montalvão',
-    'Promoção Humana',
-    'Gorete',
-    'Débora',
-    'Elsa',
-    'Selma',
-    'Fátima',
-  ])
+  const newDonateModal = useDisclosure()
+  const deleteDonateModal = useDisclosure()
 
-  const [donates, setDonates] = useState(() => {
-    const saved = localStorage.getItem('donates')
-    const initialValue = JSON.parse(saved)
-    return initialValue || []
-  })
-
+  const { donates, setDonates } = useContext(DonatesContext)
+  const [donateIndexSelected, setDonateIndexSelected] = useState(0);
   //form
-  const [family, setFamily] = useState('')
-  const [responsible, setResponsible] = useState('')
-  const [obs, setObs] = useState('')
-  const [date, setDate] = useState('')
-
-  useEffect(() => {
-    setResponsibles(responsibles.sort())
-  }, [])
-
   useEffect(() => {
     localStorage.setItem('donates', JSON.stringify(donates))
   }, [donates])
 
-  function handleSubmit(e) {
-    e.preventDefault()
-    setDonates([
-      ...donates,
-      {
-        family,
-        responsible,
-        obs,
-        date,
-      },
-    ])
-
-    setFamily("");
-    setResponsible("");
-    setObs("");
-    setDate("");
-    
-    onClose();
+  async function copyTextToClipboard(text) {
+    if('clipboard' in navigator) {
+      return await navigator.clipboard.writeText(text)
+    } else {
+      return document.execCommand("copy", true, text)
+    }
   }
+
   return (
     <>
       <div id="App">
         <header>
           <img src={logo} alt="Coragem Logo" />
           <Box>
-            <Heading><em>CORAGEM</em></Heading>
+            <Heading>
+              <em>CORAGEM</em>
+            </Heading>
             <Text>Paróquia Saõ Jośe de Castilho - SP</Text>
           </Box>
         </header>
         <main>
           <Box id="actions">
-            <Button onClick={onOpen}>+ Nova Doação</Button>
+            <Button onClick={newDonateModal.onOpen} colorScheme="blue">
+              + Nova Doação
+            </Button>
+            <Button
+              leftIcon={<CopyIcon />}
+              variant="outline"
+              color="blue"
+              ml="10px"
+              onClick={() => copyTextToClipboard(JSON.stringify(donates))}
+            >
+              Copiar
+            </Button>
+          </Box>
+
+          <Box
+            id="reports"
+            style={{
+              display: 'flex',
+              gap: '20px',
+            }}
+          >
+            <Stat
+              style={{
+                borderWidth: '1px',
+                borderColor: 'gray.200',
+                borderRadius: '8px',
+                padding: '10px',
+              }}
+            >
+              <StatLabel>QTD DE DOAÇÕES</StatLabel>
+              <StatNumber>{donates.length}</StatNumber>
+            </Stat>
+
+            <Stat
+              style={{
+                borderWidth: '1px',
+                borderColor: 'gray.200',
+                borderRadius: '8px',
+                padding: '10px',
+              }}
+            >
+              <StatLabel>ÚLTIMA DOAÇÃO</StatLabel>
+              <StatNumber>{donates.length > 0 ? donates[0].family : ''}</StatNumber>
+            </Stat>
           </Box>
           <Box id="table">
             <TableContainer>
-              <Table variant="simple">
-              <TableCaption>Relações das doações</TableCaption>
+              <Table variant="striped">
+                <TableCaption>Relações das doações</TableCaption>
                 <Thead>
                   <Tr>
                     <Th>Família</Th>
                     <Th>Responsável</Th>
                     <Th>Data</Th>
                     <Th>Observação</Th>
+                    <Th></Th>
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -112,6 +127,12 @@ function App() {
                         <Td>{donate.responsible}</Td>
                         <Td>{donate.date}</Td>
                         <Td>{donate.obs}</Td>
+                        <Td onClick={() => {
+                          setDonateIndexSelected(index);
+                          deleteDonateModal.onOpen();
+                        }}>
+                          <DeleteIcon />
+                        </Td>
                       </Tr>
                     )
                   })}
@@ -121,56 +142,31 @@ function App() {
           </Box>
         </main>
       </div>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <NewDonateModal
+        isOpen={newDonateModal.isOpen}
+        onClose={newDonateModal.onClose}
+      ></NewDonateModal>
+      <Modal
+        isOpen={deleteDonateModal.isOpen}
+        onClose={deleteDonateModal.onClose}
+      >
         <ModalOverlay>
           <ModalContent p="4">
-            <ModalHeader paddingInlineStart="0">Nova Doação</ModalHeader>
-            <form onSubmit={handleSubmit}>
-              <FormControl>
-                <FormLabel mb="4px">Família</FormLabel>
-                <Input
-                  type="text"
-                  value={family}
-                  onChange={(e) => setFamily(e.target.value)}
-                />
-              </FormControl>
-
-              <FormControl mt="16px">
-                <FormLabel mb="4px">Responsável</FormLabel>
-                <Select
-                  onChange={(e) =>
-                    setResponsible(e.target.selectedOptions[0].value)
-                  }
-                  defaultValue="Reponsável"
-                >
-                  <option selected hidden >Responsável</option>
-                  {responsibles.map((resp, index) => {
-                    return <option key={index}>{resp}</option>
-                  })}
-                </Select>
-              </FormControl>
-
-              <FormControl mt="16px">
-                <FormLabel mb="4px">Cesta</FormLabel>
-                <Textarea
-                  placeholder="Cesta completa... apenas um pacote de 2kg de arroz... meia cesta..."
-                  value={obs}
-                  onChange={(e) => setObs(e.target.value)}
-                ></Textarea>
-              </FormControl>
-
-              <FormControl mt="16px">
-                <FormLabel mb="4px">Data</FormLabel>
-                <Input
-                  type="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                />
-              </FormControl>
-              <Button colorScheme="blue" mt="16px" w="100%" type="submit">
-                Salvar
+            <ModalHeader paddingInlineStart="0" pt="0">
+              Tem certeza que deseja excluir?
+            </ModalHeader>
+            <Box style={{
+              display: "flex",
+              gap: "1rem"
+            }}>
+              <Button variant="outline" width="100%" onClick={deleteDonateModal.onClose}>
+                Cancelar
               </Button>
-            </form>
+              <Button colorScheme="blue" width="100%" onClick={() => {
+                setDonates(donates.filter((donate, index) => index !== donateIndexSelected))
+                deleteDonateModal.onClose();
+              }}>Excluir</Button>
+            </Box>
           </ModalContent>
         </ModalOverlay>
       </Modal>
