@@ -7,12 +7,15 @@ import {
   AlertDialogOverlay,
   Button,
 } from '@chakra-ui/react'
+import { useContext } from 'react'
+import { DonatesContext } from './context/donates'
 
-export default function DeleteDoanteModal({ isOpen, onClose, onOpen }) {
+export default function DeleteDoanteModal({ isOpen, onClose, onOpen, donateIndexSelected }) {
+  const {donates, setDonates} = useContext(DonatesContext)
   return (
     <AlertDialog isOpen={isOpen} onClose={onClose}>
       <AlertDialogOverlay>
-        <AlertDialogContent>
+        <AlertDialogContent w={["90%",500,600]}>
           <AlertDialogHeader fontSize="lg" fontWeight="bold">
             Deletar Doação
           </AlertDialogHeader>

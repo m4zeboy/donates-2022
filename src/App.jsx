@@ -156,6 +156,7 @@ function App() {
         isOpen={deleteDonateModal.isOpen} 
         onClose={deleteDonateModal.onClose}
         onOpen={deleteDonateModal.onOpen}
+        donateIndexSelected={donateIndexSelected}
         >
 
       </DeleteDoanteModal>

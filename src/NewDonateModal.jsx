@@ -62,10 +62,10 @@ export function NewDonateModal({ isOpen, onClose }) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay>
-        <ModalContent>
+        <ModalContent w={["90%",500,600]}>
           <ModalHeader>Nova Doação</ModalHeader>
           <ModalBody>
-            <form>
+            <form onScroll={handleSubmit}>
               <FormControl isRequired>
                 <FormLabel mb="4px">Família</FormLabel>
                 <Input
@@ -122,7 +122,7 @@ export function NewDonateModal({ isOpen, onClose }) {
             <Button onClick={onClose}>
               Cancelar
             </Button>
-            <Button colorScheme="blue" type="submit" onClick={handleSubmit} ml={4}>
+            <Button colorScheme="blue" type="submit" ml={4}>
               Salvar
             </Button>
           </ModalFooter>
