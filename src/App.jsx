@@ -28,6 +28,7 @@ import {
 import { NewDonateModal } from './NewDonateModal'
 import { DonatesContext } from './context/donates'
 import toast, { Toaster } from 'react-hot-toast'
+import DeleteDoanteModal from './DeleteDonateModal'
 
 function App() {
   const newDonateModal = useDisclosure()
@@ -151,31 +152,13 @@ function App() {
         isOpen={newDonateModal.isOpen}
         onClose={newDonateModal.onClose}
       ></NewDonateModal>
-      <Modal
-        isOpen={deleteDonateModal.isOpen}
+      <DeleteDoanteModal 
+        isOpen={deleteDonateModal.isOpen} 
         onClose={deleteDonateModal.onClose}
-      >
-        <ModalOverlay>
-          <ModalContent p="4">
-            <ModalHeader paddingInlineStart="0" pt="0">
-              Tem certeza que deseja excluir?
-            </ModalHeader>
-            <Box style={{
-              display: "flex",
-              gap: "1rem"
-            }}>
-              <Button variant="outline" width="100%" onClick={deleteDonateModal.onClose}>
-                Cancelar
-              </Button>
-              <Button colorScheme="blue" width="100%" onClick={() => {
-                setDonates(donates.filter((donate, index) => index !== donateIndexSelected))
-                deleteDonateModal.onClose();
-                toast.success("Doação Excluida")
-              }}>Excluir</Button>
-            </Box>
-          </ModalContent>
-        </ModalOverlay>
-      </Modal>
+        onOpen={deleteDonateModal.onOpen}
+        >
+
+      </DeleteDoanteModal>
     </>
   )
 }
