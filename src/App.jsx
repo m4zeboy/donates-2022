@@ -71,7 +71,7 @@ function App() {
               leftIcon={<CopyIcon />}
               variant="outline"
               color="blue"
-              ml="10px"
+              ml={[0,"10px", "10px"]}
               onClick={() => {
                 copyTextToClipboard(JSON.stringify(donates));
                 toast("Copiado!");
@@ -87,6 +87,7 @@ function App() {
               display: 'flex',
               gap: '20px',
             }}
+            flexDirection={["column", "row"]}
           >
             <Stat
               style={{

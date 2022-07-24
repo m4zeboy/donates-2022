@@ -37,8 +37,8 @@ export function NewDonateModal({ isOpen, onClose }) {
     setResponsibles(responsibles.sort())
   }, [])
 
-  function handleSubmit(e) {
-    e.preventDefault()
+  function handleSubmit(event) {
+    event.preventDefault()
 
     setDonates([
       {
@@ -62,10 +62,10 @@ export function NewDonateModal({ isOpen, onClose }) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay>
-        <ModalContent w={["90%",500,600]}>
-          <ModalHeader>Nova Doação</ModalHeader>
-          <ModalBody>
-            <form onScroll={handleSubmit}>
+        <form onSubmit={handleSubmit}>
+          <ModalContent w={['90%', 500, 600]}>
+            <ModalHeader>Nova Doação</ModalHeader>
+            <ModalBody>
               <FormControl isRequired>
                 <FormLabel mb="4px">Família</FormLabel>
                 <Input
@@ -109,24 +109,25 @@ export function NewDonateModal({ isOpen, onClose }) {
                   onChange={(e) => setDate(e.target.value)}
                 />
               </FormControl>
-            </form>
-          </ModalBody>
-          <ModalFooter style={{
-            marginTop: "1rem",
-            borderRadius: "0 0 8px 8px",
-          }}
-          backgroundColor="gray.200"
-          borderTopColor="gray.300"
-          borderTopWidth="1px"
-          >
-            <Button onClick={onClose}>
-              Cancelar
-            </Button>
-            <Button colorScheme="blue" type="submit" ml={4}>
-              Salvar
-            </Button>
-          </ModalFooter>
-        </ModalContent>
+            </ModalBody>
+            <ModalFooter
+              style={{
+                marginTop: '1rem',
+                borderRadius: '0 0 8px 8px',
+              }}
+              backgroundColor="gray.200"
+              borderTopColor="gray.300"
+              borderTopWidth="1px"
+            >
+              <Button onClick={onClose} type="reset">
+                Cancelar
+              </Button>
+              <Button colorScheme="blue" type="submit" ml={4}>
+                Salvar
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </form>
       </ModalOverlay>
     </Modal>
   )
