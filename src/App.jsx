@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { CopyIcon, DeleteIcon } from '@chakra-ui/icons'
+import { AddIcon, CopyIcon, DeleteIcon } from '@chakra-ui/icons'
 import './styles/App.scss'
 import logo from './assets/logo.png'
 import {
@@ -62,23 +62,29 @@ function App() {
           </Box>
         </header>
         <main>
-          <Box id="actions">
+          <Box id="actions" style={{
+            display: 'flex',
+            gap: '1rem'
+          }}>
             <Toaster/>
-            <Button onClick={newDonateModal.onOpen} colorScheme="blue">
-              + Nova Doação
-            </Button>
-            <Button
-              leftIcon={<CopyIcon />}
-              variant="outline"
-              color="blue"
-              ml={[0,"10px", "10px"]}
+            <button 
+              onClick={newDonateModal.onOpen} 
+              className="round-btn"
+              style={{
+                backgroundColor: 'rgba(66, 153, 225, 0.15)'
+              }}
+              >
+              <AddIcon color="blue.600"/>
+            </button>
+            <button
+              className="round-btn"
               onClick={() => {
                 copyTextToClipboard(JSON.stringify(donates));
                 toast("Copiado!");
               }}
             >
-              Copiar
-            </Button>
+              <CopyIcon />
+            </button>
           </Box>
 
           <Box

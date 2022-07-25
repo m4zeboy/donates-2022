@@ -8,6 +8,7 @@ import {
   Button,
 } from '@chakra-ui/react'
 import { useContext } from 'react'
+import toast from 'react-hot-toast'
 import { DonatesContext } from './context/donates'
 
 export default function DeleteDoanteModal({ isOpen, onClose, onOpen, donateIndexSelected }) {

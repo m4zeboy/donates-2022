@@ -31,6 +31,7 @@ export function NewDonateModal({ isOpen, onClose }) {
     'Elsa',
     'Selma',
     'Fátima',
+    'Jair'
   ])
 
   useEffect(() => {
@@ -78,18 +79,18 @@ export function NewDonateModal({ isOpen, onClose }) {
 
               <FormControl isRequired mt={4}>
                 <FormLabel mb="4px">Responsável</FormLabel>
-                <Select
-                  onChange={(e) =>
-                    setResponsible(e.target.selectedOptions[0].value)
-                  }
-                >
-                  <option defaultValue="Responsável" hidden color="gray.300">
-                    Responsável
-                  </option>
-                  {responsibles.map((resp, index) => {
-                    return <option key={index}>{resp}</option>
+                <Input 
+                  type="text"
+                  placeholder='Responsável'
+                  list="responsibles_list"
+                />
+                <datalist id="responsibles_list">
+                  {responsibles.map((responsible, index) => {
+                    return (
+                      <option value={responsible} key={index}>{responsible}</option>
+                    )
                   })}
-                </Select>
+                </datalist>
               </FormControl>
 
               <FormControl isRequired mt={4}>
