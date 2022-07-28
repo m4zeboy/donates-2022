@@ -83,6 +83,8 @@ export function NewDonateModal({ isOpen, onClose }) {
                   type="text"
                   placeholder='Responsável'
                   list="responsibles_list"
+                  value={responsible}
+                  onChange={(e) => setResponsible(e.target.value)}
                 />
                 <datalist id="responsibles_list">
                   {responsibles.map((responsible, index) => {
