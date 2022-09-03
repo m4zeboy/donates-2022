@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { AddIcon, CopyIcon, DeleteIcon } from '@chakra-ui/icons'
+import { AddIcon, CopyIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import './styles/App.scss'
 import logo from './assets/logo.png'
 import {
@@ -19,20 +19,18 @@ import {
   Stat,
   StatLabel,
   StatNumber,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  Modal,
 } from '@chakra-ui/react'
 
 import { NewDonateModal } from './NewDonateModal'
 import { DonatesContext } from './context/donates'
 import toast, { Toaster } from 'react-hot-toast'
 import DeleteDoanteModal from './DeleteDonateModal'
+import EditDoanteModal from './EditDonateModal'
 
 function App() {
   const newDonateModal = useDisclosure()
   const deleteDonateModal = useDisclosure()
+  const editDonateModal = useDisclosure()
 
   const { donates, setDonates } = useContext(DonatesContext)
   const [donateIndexSelected, setDonateIndexSelected] = useState(0);
@@ -129,7 +127,8 @@ function App() {
                     <Th>Responsável</Th>
                     <Th>Data</Th>
                     <Th>Observação</Th>
-                    <Th></Th>
+                    <Th>Excluir</Th>
+                    <Th>Editar</Th>
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -145,6 +144,13 @@ function App() {
                           deleteDonateModal.onOpen();
                         }}>
                           <DeleteIcon />
+                        </Td>
+
+                        <Td onClick={() => {
+                          setDonateIndexSelected(index);
+                          editDonateModal.onOpen();
+                        }}>
+                          <EditIcon />
                         </Td>
                       </Tr>
                     )
@@ -167,6 +173,12 @@ function App() {
         >
 
       </DeleteDoanteModal>
+      <EditDoanteModal
+        isOpen={editDonateModal.isOpen} 
+        onClose={editDonateModal.onClose}
+        onOpen={editDonateModal.onOpen}
+        donateIndexSelected={donateIndexSelected}
+      ></EditDoanteModal>
     </>
   )
 }
