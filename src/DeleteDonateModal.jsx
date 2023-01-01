@@ -11,7 +11,7 @@ import { useContext } from 'react'
 import toast from 'react-hot-toast'
 import { DonatesContext } from './context/donates'
 
-export default function DeleteDoanteModal({ isOpen, onClose, onOpen, donateIndexSelected }) {
+export default function DeleteDonateModal({ isOpen, onClose, onOpen, donateIndexSelected }) {
   const {donates, setDonates} = useContext(DonatesContext)
   return (
     <AlertDialog isOpen={isOpen} onClose={onClose}>

@@ -14,6 +14,13 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+    form {
+      padding: 20px;
+      background-color: #EDF2f7;
+      select {
+        background-color: white;
+      }
+    }
   }
 }
 
@@ -21,7 +28,9 @@
   #App {
     main {
       padding: 0 20px;
-
+      #wrap-filter {
+        flex-direction: column;
+      }
     }
 
   }

@@ -13,7 +13,7 @@ import { useContext, useState } from 'react'
 import toast from 'react-hot-toast'
 import { DonatesContext } from './context/donates'
 
-export default function EditDoanteModal({
+export default function EditDonateModal({
   isOpen,
   onClose,
   onOpen,

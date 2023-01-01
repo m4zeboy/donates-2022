@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { AddIcon, CopyIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import './styles/App.scss'
 import logo from './assets/logo.png'
@@ -19,13 +19,14 @@ import {
   Stat,
   StatLabel,
   StatNumber,
+  Select,
 } from '@chakra-ui/react'
 
 import { NewDonateModal } from './NewDonateModal'
 import { DonatesContext } from './context/donates'
 import toast, { Toaster } from 'react-hot-toast'
-import DeleteDoanteModal from './DeleteDonateModal'
-import EditDoanteModal from './EditDonateModal'
+import DeleteDonateModal from './DeleteDonateModal'
+import EditDonateModal from './EditDonateModal'
 
 function App() {
   const newDonateModal = useDisclosure()
@@ -34,6 +35,8 @@ function App() {
 
   const { donates, setDonates } = useContext(DonatesContext)
   const [donateIndexSelected, setDonateIndexSelected] = useState(0);
+  const [year, setYear] = useState("2023");
+  const [month, setMonth] = useState("01");
   //form
   useEffect(() => {
     localStorage.setItem('donates', JSON.stringify(donates))
@@ -47,6 +50,7 @@ function App() {
     }
   }
 
+  const filteredDonates = Array.from(donates).filter(donate => donate.date.includes(`${year}-${month}`))
   return (
     <>
       <div id="App">
@@ -77,7 +81,7 @@ function App() {
             <button
               className="round-btn"
               onClick={() => {
-                copyTextToClipboard(JSON.stringify(donates));
+                copyTextToClipboard(JSON.stringify(filteredDonates));
                 toast("Copiado!");
               }}
             >
@@ -117,6 +121,40 @@ function App() {
               <StatNumber>{donates.length > 0 ? donates[0].family : ''}</StatNumber>
             </Stat>
           </Box>
+
+          <Box mt={2} mb={2} id="filter">
+              <form>
+                <strong>Filtrar por</strong>
+                <Box display="flex" gap="4" id="wrap-filter">
+                  <Box className="form-control" display="flex" gap="2" alignItems="center">
+                    <label htmlFor="filter-year">Ano: </label>
+                    <Select type="text" id='filter-year' onChange={(e) => setYear(e.target.value)}>
+                      <option>2023</option>
+                      <option>2022</option>
+                    </Select>
+                  </Box>
+                  <Box className="form-control" display="flex" gap="2" alignItems="center">
+                    <label htmlFor="filter-month">Mês: </label>
+                    <Select type="text" id='filter-month' onChange={(e) => setMonth(e.target.value)}>
+                      <option value="01">Janeiro</option>
+                      <option value="02">Fevereiro</option>
+                      <option value="03">Março</option>
+                      <option value="04">Abril</option>
+                      <option value="05">Maio</option>
+                      <option value="06">Junho</option>
+                      <option value="07">Julho</option>
+                      <option value="08">Agosto</option>
+                      <option value="09">Setembro</option>
+                      <option value="10">Outubro</option>
+                      <option value="11">Novembro</option>
+                      <option value="12">Dezembro</option>
+                    </Select>
+                  </Box>
+                </Box>
+                <small>O filtro ocorre automaticamente ao escolher o mês ou o ano.</small>
+              </form>
+          </Box>
+
           <Box id="table">
             <TableContainer>
               <Table variant="striped">
@@ -132,7 +170,7 @@ function App() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {Array.from(donates).map((donate, index) => {
+                  {filteredDonates.map((donate, index) => {
                     return (
                       <Tr key={index}>
                         <Td>{donate.family}</Td>
@@ -165,20 +203,20 @@ function App() {
         isOpen={newDonateModal.isOpen}
         onClose={newDonateModal.onClose}
       ></NewDonateModal>
-      <DeleteDoanteModal 
+      <DeleteDonateModal 
         isOpen={deleteDonateModal.isOpen} 
         onClose={deleteDonateModal.onClose}
         onOpen={deleteDonateModal.onOpen}
         donateIndexSelected={donateIndexSelected}
         >
 
-      </DeleteDoanteModal>
-      <EditDoanteModal
+      </DeleteDonateModal>
+      <EditDonateModal
         isOpen={editDonateModal.isOpen} 
         onClose={editDonateModal.onClose}
         onOpen={editDonateModal.onOpen}
         donateIndexSelected={donateIndexSelected}
-      ></EditDoanteModal>
+      ></EditDonateModal>
     </>
   )
 }
